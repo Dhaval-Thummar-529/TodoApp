@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/Model/TodoModel.dart';
+import 'package:todo_app/Service/DatabaseHandler.dart';
+
+import 'ToDo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,53 +29,58 @@ class MyTodoApp extends StatefulWidget {
 }
 
 class _MyTodoApp extends State<MyTodoApp> {
-  final List<String> _todoList = <String>[];
   final TextEditingController _textEditingController = TextEditingController();
-
-  Widget getBody() {
-    if (_todoList.isEmpty) {
-      return const Center(child: Text("All tasks are finished!"));
-    } else {
-      return ListView(
-        children: _getItems(),
-      );
-    }
-  }
+  List<String>? todo;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: new Drawer(),
-      appBar: AppBar(
-        title: const Text("To-do List"),
-        centerTitle: true,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(
-              Icons.menu,
-              color: Colors.white,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        drawer: new Drawer(),
+        appBar: AppBar(
+          title: const Text("To-do List"),
+          bottom: const TabBar(
+            tabs: <Widget>[
+              Tab(
+                text: "To-Do",
+              ),
+              Tab(
+                text: "Active",
+              ),
+              Tab(
+                text: "Finished",
+              ),
+            ],
+          ),
+          centerTitle: true,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.white,
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
             ),
-            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            ToDo(),
+            ToDo(),
+            ToDo(),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _displayDialog(context),
+          tooltip: "Add Task",
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
           ),
         ),
       ),
-      body: SafeArea(child: getBody()),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _displayDialog(context),
-        tooltip: "Add Task",
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
     );
-  }
-
-  void addTodoItem(String title) async {
-    setState(() {
-      _todoList.add(title);
-    });
-    _textEditingController.clear();
   }
 
   Future<Future> _displayDialog(BuildContext context) async {
@@ -91,12 +100,16 @@ class _MyTodoApp extends State<MyTodoApp> {
                   FocusManager.instance.primaryFocus!.unfocus();
                   if (_textEditingController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Please Enter task to add"),
+                      content: Text("Please enter task to add"),
                       duration: Duration(seconds: 5),
                     ));
                   } else {
+                    TodoModel todo = TodoModel(
+                        title: _textEditingController.value.text,
+                        description: "Something",
+                        status: "Todo");
+                    DatabaseHandler().insertTodo(todo);
                     Navigator.of(context).pop();
-                    addTodoItem(_textEditingController.text);
                   }
                 },
                 child: const Text("ADD"),
@@ -110,19 +123,5 @@ class _MyTodoApp extends State<MyTodoApp> {
             ],
           );
         });
-  }
-
-  List<Widget> _getItems() {
-    final List<Widget> _todoWidget = <Widget>[];
-    for (String title in _todoList) {
-      _todoWidget.add(_buildTodoItem(title));
-    }
-    return _todoWidget;
-  }
-
-  Widget _buildTodoItem(String title) {
-    return ListTile(
-      title: Text(title),
-    );
   }
 }
