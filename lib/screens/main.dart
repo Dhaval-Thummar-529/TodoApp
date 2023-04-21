@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:todo_app/Model/TodoModel.dart';
 import 'package:todo_app/Service/DatabaseHandler.dart';
@@ -29,8 +31,29 @@ class MyTodoApp extends StatefulWidget {
 }
 
 class _MyTodoApp extends State<MyTodoApp> {
-  final TextEditingController _textEditingController = TextEditingController();
-  List<String>? todo;
+  final TextEditingController _title = TextEditingController();
+  final TextEditingController _description = TextEditingController();
+
+  //To-do list from database
+  late Future<List<TodoModel>> todoList;
+
+  //Active list from database
+  late Future<List<TodoModel>> activeList;
+
+  //Finished list from database
+  late Future<List<TodoModel>> finishedList;
+
+  late DatabaseHandler handler;
+
+  @override
+  void initState() {
+    super.initState();
+    //To-do list from database
+    handler = DatabaseHandler();
+    todoList = handler.retrieveTodo("Todo");
+    activeList = handler.retrieveTodo("Active");
+    finishedList = handler.retrieveTodo("Finished");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +87,17 @@ class _MyTodoApp extends State<MyTodoApp> {
             ),
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
-            ToDo(),
-            ToDo(),
-            ToDo(),
+            ToDo(
+              todoList: todoList,
+            ),
+            ToDo(
+              todoList: activeList,
+            ),
+            ToDo(
+              todoList: finishedList,
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -89,26 +118,46 @@ class _MyTodoApp extends State<MyTodoApp> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Add a task to your list"),
-            content: TextField(
-              controller: _textEditingController,
-              decoration: const InputDecoration(hintText: "Enter task here"),
-              autofocus: true,
+            content: Wrap(
+              children: [
+                Column(
+                  children: [
+                    TextField(
+                      controller: _title,
+                      textInputAction: TextInputAction.next,
+                      decoration:
+                          const InputDecoration(hintText: "Enter task here"),
+                      autofocus: true,
+                    ),
+                    TextField(
+                      controller: _description,
+                      textInputAction: TextInputAction.done,
+                      decoration: const InputDecoration(
+                          hintText: "Enter description here"),
+                      autofocus: true,
+                    ),
+                  ],
+                ),
+              ],
             ),
             actions: <Widget>[
               MaterialButton(
                 onPressed: () {
                   FocusManager.instance.primaryFocus!.unfocus();
-                  if (_textEditingController.text.isEmpty) {
+                  if (_title.text.isEmpty || _description.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Please enter task to add"),
+                      content: Text("Please fill all fields to add task!"),
                       duration: Duration(seconds: 5),
                     ));
                   } else {
                     TodoModel todo = TodoModel(
-                        title: _textEditingController.value.text,
-                        description: "Something",
+                        title: _title.value.text,
+                        description: _description.value.text,
                         status: "Todo");
                     DatabaseHandler().insertTodo(todo);
+                    setState(() {
+                      todoList = handler.retrieveTodo("Todo");
+                    });
                     Navigator.of(context).pop();
                   }
                 },
