@@ -2,24 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../Model/TodoModel.dart';
-import '../Service/DatabaseHandler.dart';
 
 class ToDo extends StatefulWidget {
-  const ToDo({super.key});
+  Future<List<TodoModel>> todoList;
+
+  ToDo({super.key, required this.todoList});
 
   @override
-  _Todo createState() => _Todo();
+  _Todo createState() => _Todo(todoList: todoList);
 }
 
 class _Todo extends State<ToDo> {
-  List<TodoModel> todoList = [];
-  late DatabaseHandler handler;
+  Future<List<TodoModel>> todoList;
 
-  @override
-  void initState() {
-    handler = DatabaseHandler();
-    super.initState();
-  }
+  _Todo({required this.todoList});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +23,7 @@ class _Todo extends State<ToDo> {
       body: SafeArea(
         child: Center(
           child: FutureBuilder(
-              future: handler.retrieveTodo("Todo"),
+              future: todoList,
               builder: (BuildContext context,
                   AsyncSnapshot<List<TodoModel>> snapshot) {
                 if (snapshot.hasData) {
