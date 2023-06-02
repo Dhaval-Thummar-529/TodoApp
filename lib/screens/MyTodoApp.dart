@@ -1,75 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:todo_app/Model/TodoModel.dart';
-import 'package:todo_app/Service/DatabaseHandler.dart';
-import 'package:todo_app/constants/getPages.dart';
-import 'package:todo_app/screens/splashScreen.dart';
+import 'package:todo_app/controllers/MyTodoAppController.dart';
 
-import 'screens/ToDo.dart';
+class MyTodoApp extends StatelessWidget {
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-
-    return GetMaterialApp(
-      title: "Todo App",
-      debugShowCheckedModeBanner: false,
-      getPages: getPages,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const CSplashScreen(),
-    );
-  }
-}
-
-/*class MyTodoApp extends StatefulWidget {
-  const MyTodoApp({super.key});
-
-  @override
-  _MyTodoApp createState() => _MyTodoApp();
-}
-
-class _MyTodoApp extends State<MyTodoApp> {
-  final TextEditingController _title = TextEditingController();
-  final TextEditingController _description = TextEditingController();
-
-  //To-do list from database
-  late Future<List<TodoModel>> todoList;
-
-  //Active list from database
-  late Future<List<TodoModel>> activeList;
-
-  //Finished list from database
-  late Future<List<TodoModel>> finishedList;
-
-  late DatabaseHandler handler;
-
-  @override
-  void initState() {
-    super.initState();
-    //To-do list from database
-    handler = DatabaseHandler();
-    todoList = handler.retrieveTodo("Todo");
-    activeList = handler.retrieveTodo("Active");
-    finishedList = handler.retrieveTodo("Finished");
-  }
+  final MyTodoAppController controller = Get.put(MyTodoAppController());
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        drawer: new Drawer(),
+        drawer: const Drawer(),
         appBar: AppBar(
-          title: const Text("To-do List"),
+          title: const Text("To-do App"),
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
@@ -133,7 +77,7 @@ class _MyTodoApp extends State<MyTodoApp> {
                       controller: _title,
                       textInputAction: TextInputAction.next,
                       decoration:
-                          const InputDecoration(hintText: "Enter task here"),
+                      const InputDecoration(hintText: "Enter task here"),
                       autofocus: true,
                     ),
                     TextField(
@@ -179,5 +123,4 @@ class _MyTodoApp extends State<MyTodoApp> {
             ],
           );
         });
-  }
-}*/
+}
