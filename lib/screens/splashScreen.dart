@@ -17,7 +17,7 @@ class _CSplashScreen extends State<CSplashScreen>{
     return SplashScreen(
       backgroundColor: Colors.blue,
       seconds: 3,
-      navigateAfterSeconds: const MyTodoApp(),
+      navigateAfterSeconds: MyTodoApp(),
     );
   }
 
