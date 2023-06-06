@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:todo_app/controllers/TodoController.dart';
 
 import '../Model/TodoModel.dart';
 import '../Service/DatabaseHandler.dart';
@@ -8,22 +10,22 @@ class ToDo extends StatelessWidget {
   final String todoType;
   ToDo({super.key, required this.todoType});
 
-  late List<TodoModel> todoList = await DatabaseHandler().retrieveTodo(todoType);
+  final TodoController controller = Get.put(TodoController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: todoList.isNotEmpty
+          child: controller.cList.isNotEmpty
               ? ListView.builder(
-                  itemCount: todoList.length,
+                  itemCount: controller.cList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(8),
-                        title: Text(todoList[index].title),
-                        subtitle: Text(todoList[index].description),
+                        title: Text(controller.cList[index].title),
+                        subtitle: Text(controller.cList[index].description),
                       ),
                     );
                   })

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/controllers/TodoController.dart';
 
 import '../Model/TodoModel.dart';
 import '../Service/DatabaseHandler.dart';
@@ -12,15 +13,6 @@ class MyTodoAppController extends GetxController{
   //to-do description
   final TextEditingController description = TextEditingController();
 
-  //To-do list from database
-  late List<TodoModel> todoList;
-
-  //Active list from database
-  late Future<List<TodoModel>> activeList;
-
-  //Finished list from database
-  late Future<List<TodoModel>> finishedList;
-
   //Database Handler
   late DatabaseHandler handler;
 
@@ -29,9 +21,6 @@ class MyTodoAppController extends GetxController{
     //initialize on starting of the screen
     super.onInit();
     handler = DatabaseHandler();
-    fetchTodo();
-    activeList = handler.retrieveTodo("Active");
-    finishedList = handler.retrieveTodo("Finished");
   }
 
   @override
@@ -55,14 +44,10 @@ class MyTodoAppController extends GetxController{
           description: description.value.text,
           status: "Todo");
       handler.insertTodo(todo);
-      fetchTodo();
+      TodoController().retrieveList();
       emptyFields();
       Get.back();
     }
-  }
-
-  fetchTodo() async {
-    todoList = await handler.retrieveTodo("Todo");
   }
 
   void emptyFields(){
