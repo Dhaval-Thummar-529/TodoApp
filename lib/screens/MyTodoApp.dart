@@ -46,14 +46,17 @@ class MyTodoApp extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
+            //Tab for TodoList
             ToDo(
-              todoList: controller.todoList,
+              todoType: "Todo",
             ),
+            //Tab for ActiveList
             ToDo(
-              todoList: controller.activeList,
+              todoType: "Active",
             ),
+            //Tab for FinishedList
             ToDo(
-              todoList: controller.finishedList,
+              todoType: "Finished",
             ),
           ],
         ),

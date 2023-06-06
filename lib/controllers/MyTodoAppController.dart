@@ -13,7 +13,7 @@ class MyTodoAppController extends GetxController{
   final TextEditingController description = TextEditingController();
 
   //To-do list from database
-  late Future<List<TodoModel>> todoList;
+  late List<TodoModel> todoList;
 
   //Active list from database
   late Future<List<TodoModel>> activeList;
@@ -29,7 +29,7 @@ class MyTodoAppController extends GetxController{
     //initialize on starting of the screen
     super.onInit();
     handler = DatabaseHandler();
-    todoList = handler.retrieveTodo("Todo");
+    fetchTodo();
     activeList = handler.retrieveTodo("Active");
     finishedList = handler.retrieveTodo("Finished");
   }
@@ -55,10 +55,14 @@ class MyTodoAppController extends GetxController{
           description: description.value.text,
           status: "Todo");
       handler.insertTodo(todo);
-      todoList = handler.retrieveTodo("Todo");
+      fetchTodo();
       emptyFields();
       Get.back();
     }
+  }
+
+  fetchTodo() async {
+    todoList = await handler.retrieveTodo("Todo");
   }
 
   void emptyFields(){
