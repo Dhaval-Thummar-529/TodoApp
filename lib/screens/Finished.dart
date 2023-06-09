@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todo_app/controllers/MyTodoAppController.dart';
 import 'package:todo_app/controllers/TodoController.dart';
 
 import '../Model/TodoModel.dart';
 import '../Service/DatabaseHandler.dart';
 
-class ToDo extends StatelessWidget {
-  ToDo({super.key});
+class Finished extends StatelessWidget {
+  final Future<List<TodoModel>> finishedList;
+  Finished({super.key, required this.finishedList});
 
   final TodoController controller = Get.put(TodoController());
 
@@ -17,8 +17,8 @@ class ToDo extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: MyTodoAppController().isLoading.value ? const CircularProgressIndicator() : FutureBuilder(
-              future: controller.todoList,
+          child: FutureBuilder(
+              future: finishedList,
               builder: (BuildContext context,
                   AsyncSnapshot<List<TodoModel>> snapshot) {
                 if (snapshot.hasData) {

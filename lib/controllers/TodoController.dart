@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:todo_app/controllers/MyTodoAppController.dart';
 
 import '../Model/TodoModel.dart';
 import '../Service/DatabaseHandler.dart';
@@ -6,7 +7,7 @@ import '../Service/DatabaseHandler.dart';
 class TodoController extends GetxController{
 
   //To-do list from database
-  late List<TodoModel> todoList;
+  late Future<List<TodoModel>> todoList;
 
   //Active list from database
   late Future<List<TodoModel>> activeList;
@@ -14,23 +15,22 @@ class TodoController extends GetxController{
   //Finished list from database
   late Future<List<TodoModel>> finishedList;
 
-  //Common List with observer
-  late List<TodoModel> cList;
+  //Common List
+  late Future<List<TodoModel>> cList;
 
   //Database Handler
-  late DatabaseHandler handler;
+  late DatabaseHandler handler = DatabaseHandler();
 
   @override
   void onInit() {
     super.onInit();
     handler = DatabaseHandler();
-    cList = [];
-    retrieveList();
+    todoList = fetchTodo();
     activeList = handler.retrieveTodoByStatus("Active");
     finishedList = handler.retrieveTodoByStatus("Finished");
   }
 
-  retrieveList() async {
-    cList = await handler.retrieveTodoByStatus("Todo");
+  Future<List<TodoModel>> fetchTodo() async{
+   return await MyTodoAppController().todoList;
   }
 }

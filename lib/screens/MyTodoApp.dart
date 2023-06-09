@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 import 'package:todo_app/controllers/MyTodoAppController.dart';
 import '../Model/TodoModel.dart';
 import '../Service/DatabaseHandler.dart';
+import 'Active.dart';
+import 'Finished.dart';
 import 'ToDo.dart';
 
 class MyTodoApp extends StatelessWidget {
-
   //MyTodo
   final MyTodoAppController controller = Get.put(MyTodoAppController());
 
@@ -34,29 +35,26 @@ class MyTodoApp extends StatelessWidget {
           ),
           centerTitle: true,
           leading: Builder(
-            builder: (context) =>
-                IconButton(
-                  icon: const Icon(
-                    Icons.menu,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
+            builder: (context) => IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.white,
+              ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
           ),
         ),
         body: TabBarView(
           children: [
             //Tab for TodoList
-            ToDo(
-              todoType: "Todo",
-            ),
+            ToDo(),
             //Tab for ActiveList
-            ToDo(
-              todoType: "Active",
+            Active(
+              activeList: controller.activeList,
             ),
             //Tab for FinishedList
-            ToDo(
-              todoType: "Finished",
+            Finished(
+              finishedList: controller.finishedList,
             ),
           ],
         ),
@@ -79,27 +77,31 @@ class MyTodoApp extends StatelessWidget {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Add a task to your list"),
-            content: Wrap(
-              children: [
-                Column(
-                  children: [
-                    TextField(
-                      controller: controller.title,
-                      textInputAction: TextInputAction.next,
-                      decoration:
-                      const InputDecoration(hintText: "Enter task here"),
-                      autofocus: true,
+            content: Obx(
+              () => controller.isGettingUpdated.value
+                  ? const CircularProgressIndicator()
+                  : Wrap(
+                      children: [
+                        Column(
+                          children: [
+                            TextField(
+                              controller: controller.title,
+                              textInputAction: TextInputAction.next,
+                              decoration: const InputDecoration(
+                                  hintText: "Enter task here"),
+                              autofocus: true,
+                            ),
+                            TextField(
+                              controller: controller.description,
+                              textInputAction: TextInputAction.done,
+                              decoration: const InputDecoration(
+                                  hintText: "Enter description here"),
+                              autofocus: true,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    TextField(
-                      controller: controller.description,
-                      textInputAction: TextInputAction.done,
-                      decoration: const InputDecoration(
-                          hintText: "Enter description here"),
-                      autofocus: true,
-                    ),
-                  ],
-                ),
-              ],
             ),
             actions: <Widget>[
               MaterialButton(
@@ -111,7 +113,7 @@ class MyTodoApp extends StatelessWidget {
               MaterialButton(
                 onPressed: () {
                   controller.emptyFields();
-                 Get.back();
+                  Get.back();
                 },
                 child: const Text("CANCEL"),
               )
