@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/constants/RouteConstants.dart';
 import 'package:todo_app/controllers/TodoController.dart';
 
 import '../Model/TodoModel.dart';
@@ -13,7 +14,7 @@ class MyTodoAppController extends GetxController {
   final TextEditingController description = TextEditingController();
 
   //Database Handler
-  late DatabaseHandler handler;
+  late DatabaseHandler handler = DatabaseHandler();
 
   //To-do list from database
   late Future<List<TodoModel>> todoList;
@@ -32,7 +33,6 @@ class MyTodoAppController extends GetxController {
     //initialize on starting of the screen
     super.onInit();
     handler = DatabaseHandler();
-    todoList = retrieveList();
     activeList = handler.retrieveTodoByStatus("Active");
     finishedList = handler.retrieveTodoByStatus("Finished");
   }
@@ -60,7 +60,8 @@ class MyTodoAppController extends GetxController {
       isGettingUpdated(true);
       try {
         handler.insertTodo(todo);
-        TodoController().todoList = fetchTodo();
+        Get.find<TodoController>().updatedList();
+        emptyFields();
         Get.back();
       } catch (e) {
         print("error==> $e");
@@ -90,7 +91,11 @@ class MyTodoAppController extends GetxController {
     return list;
   }
 
-  Future<List<TodoModel>> fetchTodo() async{
-    return await MyTodoAppController().todoList;
+  fetchTodo() {
+    return MyTodoAppController().todoList;
+  }
+
+  openAddTodo(){
+    Get.toNamed(RouteConstants.addTodo);
   }
 }

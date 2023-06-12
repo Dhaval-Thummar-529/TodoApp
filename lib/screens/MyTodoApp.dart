@@ -8,12 +8,11 @@ import 'Finished.dart';
 import 'ToDo.dart';
 
 class MyTodoApp extends StatelessWidget {
-  //MyTodo
-  final MyTodoAppController controller = Get.put(MyTodoAppController());
 
   //Widget Tree
   @override
   Widget build(BuildContext context) {
+    final MyTodoAppController controller = Get.put(MyTodoAppController());
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -59,7 +58,7 @@ class MyTodoApp extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => _displayDialog(context),
+          onPressed: () => controller.openAddTodo(),
           tooltip: "Add Task",
           child: const Icon(
             Icons.add,
@@ -70,7 +69,7 @@ class MyTodoApp extends StatelessWidget {
     );
   }
 
-  Future<Future> _displayDialog(BuildContext context) async {
+  Future<Future> _displayDialog(BuildContext context, MyTodoAppController controller) async {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -79,7 +78,7 @@ class MyTodoApp extends StatelessWidget {
             title: const Text("Add a task to your list"),
             content: Obx(
               () => controller.isGettingUpdated.value
-                  ? const CircularProgressIndicator()
+                  ? Wrap(children: const [Center(child: CircularProgressIndicator())])
                   : Wrap(
                       children: [
                         Column(
@@ -106,7 +105,7 @@ class MyTodoApp extends StatelessWidget {
             actions: <Widget>[
               MaterialButton(
                 onPressed: () {
-                  controller.addTodoList(context);
+                  controller.openAddTodo();
                 },
                 child: const Text("ADD"),
               ),

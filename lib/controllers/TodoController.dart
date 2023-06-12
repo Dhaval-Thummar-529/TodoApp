@@ -25,12 +25,12 @@ class TodoController extends GetxController{
   void onInit() {
     super.onInit();
     handler = DatabaseHandler();
-    todoList = fetchTodo();
+    todoList = MyTodoAppController().retrieveList();
     activeList = handler.retrieveTodoByStatus("Active");
     finishedList = handler.retrieveTodoByStatus("Finished");
   }
 
-  Future<List<TodoModel>> fetchTodo() async{
-   return await MyTodoAppController().todoList;
+  void updatedList(){
+    todoList = handler.retrieveTodoByStatus("Todo");
   }
 }
