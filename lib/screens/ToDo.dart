@@ -8,40 +8,35 @@ import '../Model/TodoModel.dart';
 import '../Service/DatabaseHandler.dart';
 
 class ToDo extends StatelessWidget {
-  ToDo({super.key});
+  final List<TodoModel> todoList;
 
-  final TodoController controller = Get.put(TodoController());
+  ToDo({super.key, required this.todoList});
+
+  //final TodoController controller = Get.put(TodoController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: MyTodoAppController().isLoading.value ? const CircularProgressIndicator() : FutureBuilder(
-              future: controller.todoList,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<TodoModel>> snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(8),
-                            title: Text(snapshot.data![index].title),
-                            subtitle: Text(snapshot.data![index].description),
-                          ),
-                        );
-                      });
-                } else {
-                  return const Center(
-                    child: Text(
-                      "No task to do!",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                  );
-                }
-              }),
+          child: todoList.isNotEmpty
+              ? ListView.builder(
+                  itemCount: todoList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(8),
+                        title: Text(todoList[index].title),
+                        subtitle: Text(todoList[index].description),
+                      ),
+                    );
+                  })
+              : const Center(
+                  child: Text(
+                    "No task to do!",
+                    style: TextStyle(fontSize: 12, color: Colors.black),
+                  ),
+                ),
         ),
       ),
     );

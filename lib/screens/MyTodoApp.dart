@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/constants/RouteConstants.dart';
 import 'package:todo_app/controllers/MyTodoAppController.dart';
 import '../Model/TodoModel.dart';
 import '../Service/DatabaseHandler.dart';
@@ -8,7 +9,6 @@ import 'Finished.dart';
 import 'ToDo.dart';
 
 class MyTodoApp extends StatelessWidget {
-
   //Widget Tree
   @override
   Widget build(BuildContext context) {
@@ -46,19 +46,15 @@ class MyTodoApp extends StatelessWidget {
         body: TabBarView(
           children: [
             //Tab for TodoList
-            ToDo(),
+            Obx(() => ToDo(todoList: controller.todoList.value)),
             //Tab for ActiveList
-            Active(
-              activeList: controller.activeList,
-            ),
+            Obx(() => ToDo(todoList: controller.todoList.value)),
             //Tab for FinishedList
-            Finished(
-              finishedList: controller.finishedList,
-            ),
+            Obx(() => ToDo(todoList: controller.todoList.value)),
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => controller.openAddTodo(),
+          onPressed: () => Get.toNamed(RouteConstants.addTodo),
           tooltip: "Add Task",
           child: const Icon(
             Icons.add,
@@ -67,57 +63,5 @@ class MyTodoApp extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<Future> _displayDialog(BuildContext context, MyTodoAppController controller) async {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Add a task to your list"),
-            content: Obx(
-              () => controller.isGettingUpdated.value
-                  ? Wrap(children: const [Center(child: CircularProgressIndicator())])
-                  : Wrap(
-                      children: [
-                        Column(
-                          children: [
-                            TextField(
-                              controller: controller.title,
-                              textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(
-                                  hintText: "Enter task here"),
-                              autofocus: true,
-                            ),
-                            TextField(
-                              controller: controller.description,
-                              textInputAction: TextInputAction.done,
-                              decoration: const InputDecoration(
-                                  hintText: "Enter description here"),
-                              autofocus: true,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-            ),
-            actions: <Widget>[
-              MaterialButton(
-                onPressed: () {
-                  controller.openAddTodo();
-                },
-                child: const Text("ADD"),
-              ),
-              MaterialButton(
-                onPressed: () {
-                  controller.emptyFields();
-                  Get.back();
-                },
-                child: const Text("CANCEL"),
-              )
-            ],
-          );
-        });
   }
 }

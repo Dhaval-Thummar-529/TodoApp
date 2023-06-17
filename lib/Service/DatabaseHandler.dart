@@ -10,7 +10,13 @@ class DatabaseHandler {
       join(path, 'to_do.db'),
       onCreate: (database, version) async {
         await database.execute(
-          "CREATE TABLE todo(id INTEGER PRIMARY KEY, title TEXT NOT NULL, description TEXT NOT NULL,status TEXT NOT NULL)",
+          "CREATE TABLE todo(id INTEGER PRIMARY KEY, "
+              "title TEXT NOT NULL, "
+              "description TEXT NOT NULL, "
+              "status TEXT NOT NULL, "
+              "startDate Text NOT NULL, "
+              "modifiedDate TEXT, "
+              "endDate TEXT NOT NULL)",
         );
       },
       version: 1,
@@ -37,5 +43,4 @@ class DatabaseHandler {
         .update('todo', todo.toMap(), where: "id = ?", whereArgs: [todo.id]);
     return result;
   }
-
 }

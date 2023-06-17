@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/controllers/MyTodoAppController.dart';
+import 'package:todo_app/customWidgets/customSnackBar.dart';
+
+import '../Model/TodoModel.dart';
+import '../Service/DatabaseHandler.dart';
 
 class AddTodoController extends GetxController {
   //to-do title
@@ -8,6 +13,9 @@ class AddTodoController extends GetxController {
 
   //to-do description
   final TextEditingController description = TextEditingController();
+
+  //Database Handler
+  late DatabaseHandler handler = DatabaseHandler();
 
   //Picked Date variable
   DateTime? pickedDate;
@@ -35,31 +43,88 @@ class AddTodoController extends GetxController {
     description.dispose();
   }
 
+  //function to show datePicker Dialog
   openDateTimePicker(BuildContext context) async {
+    FocusManager.instance.primaryFocus!.unfocus();
     try {
       pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
-          firstDate: DateTime(DateTime
-              .now()
-              .year),
-          lastDate: DateTime(DateTime
-              .now()
-              .year + 100));
-    }catch(e){
+          firstDate: DateTime(DateTime.now().year),
+          lastDate:
+              DateTime(DateTime.now().year + 100)); // Opens DatePicker Dialog
+    } catch (e) {
       print("error==>$e");
     }
     if (pickedDate != null) {
+      //condition to check whether pickedDate is null or not
       formattedDate = pickedDate.toString().substring(0, 10);
+      print(formattedDate!);
       if (formattedDate != null && isStart.value) {
-        startDate = formattedDate.toString() as RxString;
-        print(startDate);
-        isStart(false);
+        //condition to check whether formattedDate is not null and isStart date selection
+        if (endDate.value.isNotEmpty &&
+            DateTime.parse(formattedDate!)
+                    .compareTo(DateTime.parse(endDate.value)) <=
+                0) {
+          //condition to check that EndDate is not null and StartDate is not greater than EndDate
+          startDate(formattedDate.toString());
+          print("Start Date : ${startDate.value}");
+          isStart(false);
+        } else if (endDate.value.isEmpty) {
+          //condition to check whether EndDate is null
+          startDate(formattedDate.toString());
+          print("Start Date : ${startDate.value}");
+          isStart(false);
+        } else {
+          CustomSnackBar().showSnackBar(context, "Start Date cannot be after end date!");
+        }
       } else if (formattedDate != null && isEnd.value) {
-        endDate = formattedDate.toString() as RxString;
-        print(endDate);
-        isEnd(false);
+        //condition to check whether formattedDate is not null and isEnd date selection
+        if (startDate.value.isNotEmpty &&
+            DateTime.parse(formattedDate!)
+                    .compareTo(DateTime.parse(startDate.value)) >=
+                0) {
+          //condition to check that StartDate is not null and EndDate is not lesser than StartDate
+          endDate(formattedDate.toString());
+          print("End Date : ${endDate.value}");
+          isEnd(false);
+        } else if (startDate.isEmpty) {
+          //condition to check whether StartDate is null
+          endDate(formattedDate.toString());
+          print("End Date : ${endDate.value}");
+          isEnd(false);
+        } else {
+          CustomSnackBar().showSnackBar(context, "End Date cannot be before start date!");
+        }
       }
     }
   }
+
+  addToDo() {
+    var controller = Get.find<MyTodoAppController>();
+    try {
+      if(title.value.text.isEmpty){
+
+      }
+      TodoModel todo = TodoModel(
+          title: title.value.text,
+          description: description.value.text,
+          status: "Todo",
+          startDate: startDate.value,
+          modifiedDate: "",
+          endDate: endDate.value);
+      handler.insertTodo(todo);
+      emptyFields();
+      controller.fetchTodoList();
+      Get.back();
+    } catch (e) {
+      print("error==>$e");
+    }
+  }
+
+  void emptyFields() {
+    title.text = "";
+    description.text = "";
+  }
+
 }
