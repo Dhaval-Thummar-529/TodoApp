@@ -46,11 +46,11 @@ class MyTodoApp extends StatelessWidget {
         body: TabBarView(
           children: [
             //Tab for TodoList
-            Obx(() => ToDo(todoList: controller.todoList.value)),
+            ToDo(),
             //Tab for ActiveList
-            Obx(() => ToDo(todoList: controller.todoList.value)),
+            ToDo(),
             //Tab for FinishedList
-            Obx(() => ToDo(todoList: controller.todoList.value)),
+            ToDo(),
           ],
         ),
         floatingActionButton: FloatingActionButton(

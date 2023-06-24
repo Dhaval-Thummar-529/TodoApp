@@ -8,22 +8,12 @@ import '../Service/DatabaseHandler.dart';
 
 class MyTodoAppController extends GetxController {
 
-  //To-do list from database
-  var todoList = <TodoModel>[].obs;
-
   //Database Handler
   late DatabaseHandler handler = DatabaseHandler();
 
   @override
   void onInit() {
     super.onInit();
-    handler = DatabaseHandler();
-    fetchTodoList();
-    // activeList = handler.retrieveTodoByStatus("Active");
-    // finishedList = handler.retrieveTodoByStatus("Finished");
   }
 
-  fetchTodoList() async {
-    todoList(await handler.retrieveTodoByStatus("Todo"));
-  }
 }

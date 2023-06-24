@@ -142,7 +142,7 @@ class AddTodo extends StatelessWidget {
                 Expanded(
                   child: MaterialButton(
                     onPressed: () {
-                      controller.addToDo();
+                      controller.addToDo(context);
                     },
                     child: const Text(
                       "ADD",
@@ -154,7 +154,7 @@ class AddTodo extends StatelessWidget {
                   child: MaterialButton(
                     onPressed: () {
                       controller.emptyFields();
-                      Get.offNamed(RouteConstants.myToDoApp);
+                      Get.back();
                     },
                     child: const Text(
                       "CANCEL",

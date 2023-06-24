@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:todo_app/controllers/MyTodoAppController.dart';
+import 'package:todo_app/controllers/TodoController.dart';
 import 'package:todo_app/customWidgets/customSnackBar.dart';
 
 import '../Model/TodoModel.dart';
@@ -76,7 +75,8 @@ class AddTodoController extends GetxController {
           print("Start Date : ${startDate.value}");
           isStart(false);
         } else {
-          CustomSnackBar().showSnackBar(context, "Start Date cannot be after end date!");
+          CustomSnackBar()
+              .showSnackbar("Start Date cannot be after end date!", context);
         }
       } else if (formattedDate != null && isEnd.value) {
         //condition to check whether formattedDate is not null and isEnd date selection
@@ -94,29 +94,37 @@ class AddTodoController extends GetxController {
           print("End Date : ${endDate.value}");
           isEnd(false);
         } else {
-          CustomSnackBar().showSnackBar(context, "End Date cannot be before start date!");
+          CustomSnackBar()
+              .showSnackbar("End Date cannot be before start date!", context);
         }
       }
     }
   }
 
-  addToDo() {
-    var controller = Get.find<MyTodoAppController>();
+  addToDo(context) {
     try {
-      if(title.value.text.isEmpty){
-
+      if (title.value.text.isEmpty) {
+        CustomSnackBar().showSnackbar("Please add to-do title", context);
+      } else if (description.value.text.isEmpty) {
+        CustomSnackBar().showSnackbar("Please add to-do description", context);
+      } else if (startDate.value.isEmpty) {
+        CustomSnackBar().showSnackbar("Please add start date", context);
+      } else if (endDate.value.isEmpty) {
+        CustomSnackBar().showSnackbar("Please add end date", context);
+      } else {
+        var controller = Get.find<TodoController>();
+        TodoModel todo = TodoModel(
+            title: title.value.text,
+            description: description.value.text,
+            status: "Todo",
+            startDate: startDate.value,
+            modifiedDate: "",
+            endDate: endDate.value);
+        handler.insertTodo(todo);
+        emptyFields();
+        controller.fetchTodo();
+        Get.back();
       }
-      TodoModel todo = TodoModel(
-          title: title.value.text,
-          description: description.value.text,
-          status: "Todo",
-          startDate: startDate.value,
-          modifiedDate: "",
-          endDate: endDate.value);
-      handler.insertTodo(todo);
-      emptyFields();
-      controller.fetchTodoList();
-      Get.back();
     } catch (e) {
       print("error==>$e");
     }
@@ -126,5 +134,4 @@ class AddTodoController extends GetxController {
     title.text = "";
     description.text = "";
   }
-
 }
