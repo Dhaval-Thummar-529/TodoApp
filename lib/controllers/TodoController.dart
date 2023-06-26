@@ -12,15 +12,6 @@ class TodoController extends GetxController{
   //Observable variable for Loader
   var isLoading = false.obs;
 
-  // //Active list from database
-  // late Future<List<TodoModel>> activeList;
-  //
-  // //Finished list from database
-  // late Future<List<TodoModel>> finishedList;
-
-  // //Common List
-  // late Future<List<TodoModel>> cList;
-
   //Database Handler
   late DatabaseHandler handler = DatabaseHandler();
 
@@ -29,8 +20,6 @@ class TodoController extends GetxController{
     super.onInit();
     handler = DatabaseHandler();
     fetchTodo();
-    // activeList = handler.retrieveTodoByStatus("Active");
-    // finishedList = handler.retrieveTodoByStatus("Finished");
   }
 
   fetchTodo() async {
