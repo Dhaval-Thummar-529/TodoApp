@@ -51,7 +51,7 @@ class TodoListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      //color: Colors.green.withOpacity(0.8),   ////////pending due to color logic
+        color: controller.getDateDifference(controller.todoList[index].startDate!, controller.todoList[index].endDate!)+1 <= 1 ? Colors.red.withOpacity(0.8) : controller.getDateDifference(controller.todoList[index].startDate!, controller.todoList[index].endDate!)+1 <= 2 ? Colors.orangeAccent.withOpacity(0.8) : Colors.green.withOpacity(0.8),
         elevation: 10,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -61,19 +61,28 @@ class TodoListTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    controller.todoList[index].title,
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.w600,
+                  SizedBox(
+                    width: 150,
+                    child: Text(
+                      controller.todoList[index].title,
+                      style: const TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  Text(
-                    controller.todoList[index].description,
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.w400,
+                  SizedBox(
+                    width: 150,
+                    child: Text(
+                      controller.todoList[index].description,
+                      style: const TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
                 ],
@@ -85,14 +94,14 @@ class TodoListTile extends StatelessWidget {
                       Text(
                         "Start Date : ${controller.todoList[index].startDate}",
                         style: const TextStyle(
-                          color: Colors.blue,
+                          color: Colors.white,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       Text(
-                        "End Date   : ${controller.todoList[index].startDate}",
+                        "End Date   : ${controller.todoList[index].endDate}",
                         style: const TextStyle(
-                          color: Colors.blue,
+                          color: Colors.white,
                           fontWeight: FontWeight.w400,
                         ),
                       ),

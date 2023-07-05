@@ -22,7 +22,10 @@ class _CustomCheckBox extends State<CustomCheckBox> {
         checkBoxValue = val!;
         widget.onChange(checkBoxValue);
       });
-    },activeColor: Colors.blue,);
+    },activeColor: Colors.blue,shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5.0),
+      side: const BorderSide(color: Colors.red)
+    ),);
   }
 
 }
