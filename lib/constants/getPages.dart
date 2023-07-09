@@ -8,5 +8,4 @@ import 'RouteConstants.dart';
 List<GetPage> getPages = [
   GetPage(name: RouteConstants.splashScreen, page: () => const CSplashScreen()),
   GetPage(name: RouteConstants.addTodo, page: () => AddTodo()),
-  GetPage(name: RouteConstants.addTodo, page: () => AddTodo()),
 ];

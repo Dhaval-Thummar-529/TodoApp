@@ -48,9 +48,9 @@ class MyTodoApp extends StatelessWidget {
             //Tab for TodoList
             ToDo(),
             //Tab for ActiveList
-            ToDo(),
+            Active(),
             //Tab for FinishedList
-            ToDo(),
+            Finished(),
           ],
         ),
         floatingActionButton: FloatingActionButton(
