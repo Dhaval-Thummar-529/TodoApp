@@ -48,6 +48,22 @@ class AddTodoController extends GetxController {
     try {
       pickedDate = await showDatePicker(
           context: context,
+          builder: (data, child) {
+            return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: const ColorScheme.light(
+                    primary: Colors.amberAccent, // <-- SEE HERE
+                    onPrimary: Colors.redAccent, // <-- SEE HERE
+                    onSurface: Colors.blueAccent, // <-- SEE HERE
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      primary: Colors.red, // button text color
+                    ),
+                  ),
+                ),
+                child: child!);
+          },
           initialDate: DateTime.now(),
           firstDate: DateTime(DateTime.now().year),
           lastDate:
