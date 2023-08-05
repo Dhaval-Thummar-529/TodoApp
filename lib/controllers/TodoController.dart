@@ -58,7 +58,7 @@ class TodoController extends GetxController {
             description: todoList[index].description,
             status: "active",
             startDate: todoList[index].startDate,
-            modifiedDate: todoList[index].modifiedDate,
+            modifiedDate: DateTime.now().toString().substring(0,10),
             endDate: todoList[index].endDate);
         handler.updateTodoStatus(activeModel);
         var controller = Get.find<ActiveController>();

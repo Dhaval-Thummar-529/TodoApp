@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/controllers/ActiveController.dart';
 import 'package:todo_app/controllers/TodoController.dart';
 import 'package:todo_app/customWidgets/customSnackBar.dart';
 
@@ -22,6 +23,9 @@ class AddTodoController extends GetxController {
   //Formatted Date
   String? formattedDate;
 
+  //Selected Date
+  String? selectedDate;
+
   //startDate boolean
   var isStart = false.obs;
 
@@ -33,6 +37,17 @@ class AddTodoController extends GetxController {
 
   //endDate variable
   var endDate = "".obs;
+
+  //status dropdown selected value
+  var selectedValue = "Status".obs;
+
+  List<String> statusList = ["Status","Todo","active"];
+
+  @override
+  void onInit() {
+    super.onInit();
+    selectedDate = DateTime.now().toString();
+  }
 
   @override
   void dispose() {
@@ -48,23 +63,7 @@ class AddTodoController extends GetxController {
     try {
       pickedDate = await showDatePicker(
           context: context,
-          builder: (data, child) {
-            return Theme(
-                data: Theme.of(context).copyWith(
-                  colorScheme: const ColorScheme.light(
-                    primary: Colors.amberAccent, // <-- SEE HERE
-                    onPrimary: Colors.redAccent, // <-- SEE HERE
-                    onSurface: Colors.blueAccent, // <-- SEE HERE
-                  ),
-                  textButtonTheme: TextButtonThemeData(
-                    style: TextButton.styleFrom(
-                      primary: Colors.red, // button text color
-                    ),
-                  ),
-                ),
-                child: child!);
-          },
-          initialDate: DateTime.now(),
+          initialDate: DateTime.parse(selectedDate!),
           firstDate: DateTime(DateTime.now().year),
           lastDate:
               DateTime(DateTime.now().year + 100)); // Opens DatePicker Dialog
@@ -114,6 +113,7 @@ class AddTodoController extends GetxController {
               .showSnackbar("End Date cannot be before start date!", context);
         }
       }
+      selectedDate = pickedDate.toString();
     }
   }
 
@@ -123,22 +123,29 @@ class AddTodoController extends GetxController {
         CustomSnackBar().showSnackbar("Please add to-do title", context);
       } else if (description.value.text.isEmpty) {
         CustomSnackBar().showSnackbar("Please add to-do description", context);
+      } else if (selectedValue.value==statusList[0]) {
+        CustomSnackBar().showSnackbar("Please select task status", context);
       } else if (startDate.value.isEmpty) {
         CustomSnackBar().showSnackbar("Please add start date", context);
       } else if (endDate.value.isEmpty) {
         CustomSnackBar().showSnackbar("Please add end date", context);
       } else {
-        var controller = Get.find<TodoController>();
         TodoModel todo = TodoModel(
             title: title.value.text,
             description: description.value.text,
-            status: "Todo",
+            status: selectedValue.value,
             startDate: startDate.value,
             modifiedDate: "",
             endDate: endDate.value);
         handler.insertTodo(todo);
+        if(selectedValue.value==statusList[1]){
+          var controller = Get.find<TodoController>();
+          controller.fetchTodo();
+        } else {
+          var controller = Get.find<ActiveController>();
+          controller.fetchTodo();
+        }
         emptyFields();
-        controller.fetchTodo();
         Get.back();
       }
     } catch (e) {
@@ -150,4 +157,15 @@ class AddTodoController extends GetxController {
     title.text = "";
     description.text = "";
   }
+
+  List<DropdownMenuItem<String>> get dropdownItems{
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(value: statusList[0], child: const Text("Status")),
+      DropdownMenuItem(value: statusList[1], child: const Text("Todo")),
+      DropdownMenuItem(value: statusList[2], child: const Text("Active")),
+    ];
+    return menuItems;
+  }
+
+  //Todo: show progress selector if dropdown status is active else sizedBox() also change dropdown button decoration
 }

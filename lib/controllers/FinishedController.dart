@@ -34,12 +34,4 @@ class FinishedController extends GetxController{
     }
   }
 
-  getDateDifference(String startDate, String endDate){
-    var sDate = DateTime.now();
-    var eDate = DateTime.parse(endDate);
-    var difference = eDate.difference(sDate).inDays;
-    print(difference);
-    return difference;
-  }
-
 }

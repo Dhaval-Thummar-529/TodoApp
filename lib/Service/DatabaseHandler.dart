@@ -16,7 +16,8 @@ class DatabaseHandler {
               "status TEXT NOT NULL, "
               "startDate Text NOT NULL, "
               "modifiedDate TEXT, "
-              "endDate TEXT NOT NULL)",
+              "endDate TEXT NOT NULL,"
+              "progress INTEGER)",
         );
       },
       version: 1,

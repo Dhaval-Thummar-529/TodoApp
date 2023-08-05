@@ -53,7 +53,7 @@ class FinishedListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        color: controller.getDateDifference(controller.finished[index].startDate!, controller.finished[index].endDate!)+1 <= 1 ? Colors.red.withOpacity(0.8) : controller.getDateDifference(controller.finished[index].startDate!, controller.finished[index].endDate!)+1 <= 2 ? Colors.orangeAccent.withOpacity(0.8) : Colors.green.withOpacity(0.8),
+        color: Colors.blue.withOpacity(0.5),
         elevation: 10,
         shape:
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -71,7 +71,7 @@ class FinishedListTile extends StatelessWidget {
                       controller.finished[index].title,
                       style: const TextStyle(
                         overflow: TextOverflow.ellipsis,
-                        color: Colors.white,
+                        color: Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -82,7 +82,7 @@ class FinishedListTile extends StatelessWidget {
                       controller.finished[index].description,
                       style: const TextStyle(
                         overflow: TextOverflow.ellipsis,
-                        color: Colors.white,
+                        color: Colors.black,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -92,30 +92,24 @@ class FinishedListTile extends StatelessWidget {
               Row(
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         "Start Date : ${controller.finished[index].startDate}",
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       Text(
-                        "End Date   : ${controller.finished[index].endDate}",
+                        "Finished Date : ${controller.finished[index].modifiedDate}",
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
                   ),
-                  CustomCheckBox(onChange: (val) {
-                    if (val!) {
-                      print(val);
-                    } else {
-                      print(val);
-                    }
-                  })
                 ],
               ),
             ],

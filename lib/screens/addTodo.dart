@@ -45,6 +45,36 @@ class AddTodo extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey,),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                    child: Obx(
+                      () => DropdownButton(
+                        isDense: true,
+                        iconEnabledColor: Colors.blue,
+                        value: controller.selectedValue.value,
+                        items: controller.dropdownItems,
+                        style: const TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        onChanged: (String? value) {
+                          controller.selectedValue(value!);
+                        },
+                        isExpanded: true,
+                        borderRadius: BorderRadius.circular(8.0),
+                        //Todo: Add decoration to this element
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   children: [
                     Expanded(
