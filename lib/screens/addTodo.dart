@@ -47,11 +47,14 @@ class AddTodo extends StatelessWidget {
                 ),
                 DecoratedBox(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey,),
+                    border: Border.all(
+                      color: Colors.grey,
+                    ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8),
                     child: Obx(
                       () => DropdownButton(
                         isDense: true,
@@ -71,6 +74,40 @@ class AddTodo extends StatelessWidget {
                       ),
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Obx(
+                  () => controller.selectedValue.value ==
+                          controller.statusList[2]
+                      ? Column(
+                          children: [
+                            const Text(
+                              "Percentage Completed",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.blue),
+                            ),
+                            Slider(
+                              value: controller.taskProgress.value,
+                              onChanged: (newVal) {
+                                controller.taskProgress(newVal.toDouble());
+                                print(newVal);
+                              },
+                              label: '${controller.taskProgress.value.round()}',
+                              semanticFormatterCallback: (double newValue) {
+                                return '${newValue.round()}';
+                              },
+                              min: 0,
+                              max: 100,
+                              divisions: 10,
+                              activeColor: Colors.blue,
+                              inactiveColor: Colors.grey,
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
                 ),
                 const SizedBox(
                   height: 20,

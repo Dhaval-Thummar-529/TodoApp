@@ -41,7 +41,11 @@ class AddTodoController extends GetxController {
   //status dropdown selected value
   var selectedValue = "Status".obs;
 
+  //status List
   List<String> statusList = ["Status","Todo","active"];
+
+  //Task Progress Variable
+  var taskProgress = 0.0.obs;
 
   @override
   void onInit() {
