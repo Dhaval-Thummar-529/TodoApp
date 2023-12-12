@@ -5,4 +5,5 @@ class RouteConstants {
   static const String addTodo = "/addTodo";
   static const String active = "/active";
   static const String finished = "/finished";
+  static const detailScreen = "/detailScreen";
 }
