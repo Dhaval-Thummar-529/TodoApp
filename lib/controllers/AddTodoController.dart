@@ -42,7 +42,7 @@ class AddTodoController extends GetxController {
   var selectedValue = "Status".obs;
 
   //status List
-  List<String> statusList = ["Status","Todo","active"];
+  List<String> statusList = ["Status", "Todo", "active"];
 
   //Task Progress Variable
   var taskProgress = 0.0.obs;
@@ -127,7 +127,7 @@ class AddTodoController extends GetxController {
         CustomSnackBar().showSnackbar("Please add to-do title", context);
       } else if (description.value.text.isEmpty) {
         CustomSnackBar().showSnackbar("Please add to-do description", context);
-      } else if (selectedValue.value==statusList[0]) {
+      } else if (selectedValue.value == statusList[0]) {
         CustomSnackBar().showSnackbar("Please select task status", context);
       } else if (startDate.value.isEmpty) {
         CustomSnackBar().showSnackbar("Please add start date", context);
@@ -140,9 +140,10 @@ class AddTodoController extends GetxController {
             status: selectedValue.value,
             startDate: startDate.value,
             modifiedDate: "",
-            endDate: endDate.value);
+            endDate: endDate.value,
+            progress: taskProgress.value.toInt());
         handler.insertTodo(todo);
-        if(selectedValue.value==statusList[1]){
+        if (selectedValue.value == statusList[1]) {
           var controller = Get.find<TodoController>();
           controller.fetchTodo();
         } else {
@@ -162,7 +163,7 @@ class AddTodoController extends GetxController {
     description.text = "";
   }
 
-  List<DropdownMenuItem<String>> get dropdownItems{
+  List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [
       DropdownMenuItem(value: statusList[0], child: const Text("Status")),
       DropdownMenuItem(value: statusList[1], child: const Text("Todo")),
@@ -171,5 +172,4 @@ class AddTodoController extends GetxController {
     return menuItems;
   }
 
-  //Todo: show progress selector if dropdown status is active else sizedBox() also change dropdown button decoration
 }

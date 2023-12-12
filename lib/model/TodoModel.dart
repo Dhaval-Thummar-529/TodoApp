@@ -6,6 +6,7 @@ class TodoModel {
   final String? startDate;
   final String? modifiedDate;
   final String? endDate;
+  final int? progress;
 
   TodoModel({
     this.id,
@@ -15,6 +16,7 @@ class TodoModel {
     required this.startDate,
     required this.modifiedDate,
     required this.endDate,
+    required this.progress,
   });
 
   TodoModel.fromMap(Map<String, dynamic> res)
@@ -24,7 +26,8 @@ class TodoModel {
         status = res['status'],
         startDate = res['startDate'],
         modifiedDate = res['modifiedDate'],
-        endDate = res['endDate'];
+        endDate = res['endDate'],
+        progress = res['progress'];
 
   Map<String, Object?> toMap() {
     return {
@@ -35,6 +38,6 @@ class TodoModel {
       'startDate': startDate,
       'modifiedDate': modifiedDate,
       'endDate': endDate,
-    };
+      'progress': progress };
   }
 }

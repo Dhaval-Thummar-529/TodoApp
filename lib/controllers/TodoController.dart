@@ -53,13 +53,14 @@ class TodoController extends GetxController {
     Future.delayed(const Duration(seconds: 3), () {
       try {
         TodoModel activeModel = TodoModel(
-          id: todoList[index].id,
+            id: todoList[index].id,
             title: todoList[index].title,
             description: todoList[index].description,
             status: "active",
             startDate: todoList[index].startDate,
-            modifiedDate: DateTime.now().toString().substring(0,10),
-            endDate: todoList[index].endDate);
+            modifiedDate: DateTime.now().toString().substring(0, 10),
+            endDate: todoList[index].endDate,
+            progress: 0);
         handler.updateTodoStatus(activeModel);
         var controller = Get.find<ActiveController>();
         controller.fetchTodo();

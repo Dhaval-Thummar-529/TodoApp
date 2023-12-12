@@ -59,8 +59,9 @@ class ActiveController extends GetxController{
             description: active[index].description,
             status: "finished",
             startDate: active[index].startDate,
-            modifiedDate: DateTime.now().toString().substring(0,10),
-            endDate: active[index].endDate);
+            modifiedDate: DateTime.now().toString().substring(0, 10),
+            endDate: active[index].endDate,
+            progress: 100);
         handler.updateTodoStatus(activeModel);
         var controller = Get.find<FinishedController>();
         controller.fetchTodo();
