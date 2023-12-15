@@ -38,6 +38,13 @@ class DatabaseHandler {
     return queryResult.map((e) => TodoModel.fromMap(e)).toList();
   }
 
+  Future<List<TodoModel>> retrieveAllTodo() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+    await db.query('todo');
+    return queryResult.map((e) => TodoModel.fromMap(e)).toList();
+  }
+
   Future<int> updateTodoStatus(TodoModel todo) async {
     final Database db = await initializeDB();
     var result = await db

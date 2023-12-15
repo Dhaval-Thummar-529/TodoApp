@@ -18,25 +18,54 @@ class ToDo extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
-          child: Center(
-            child: Obx(
-              () => controller.isLoading.value
-                  ? const CircularProgressIndicator(
-                      color: Colors.blue,
-                    )
-                  : controller.todoList.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: controller.todoList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return TodoListTile(index: index);
-                          })
-                      : const Center(
-                          child: Text(
-                            "No task to do!",
-                            style: TextStyle(fontSize: 12, color: Colors.black),
-                          ),
+          child: Column(
+            children: [
+              Obx(
+                () => Row(
+                  children: [
+                    Expanded(
+                      child: Slider(
+                          value: controller.toDoTaskPercentage.value,
+                          onChanged: (newVal) {
+                            // controller.taskProgress(newVal.toDouble());
+                            // print(newVal);
+                          },
+                          semanticFormatterCallback: (double newValue) {
+                            return '${newValue.round()}';
+                          },
+                          min: 0,
+                          max: 100,
+                          divisions: 100,
+                          activeColor: Colors.blue,
+                          inactiveColor: Colors.grey,
                         ),
-            ),
+                      ),
+                    Text("${controller.toDoTaskPercentage.value}%", style: const TextStyle(color: Colors.blue, fontSize: 18),),
+                  ],
+                ),
+              ),
+              Obx(
+                () => controller.isLoading.value
+                    ? const CircularProgressIndicator(
+                        color: Colors.blue,
+                      )
+                    : controller.todoList.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: controller.todoList.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return TodoListTile(index: index);
+                            })
+                        : const Center(
+                            child: Text(
+                              "No task to do!",
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.black),
+                            ),
+                          ),
+              ),
+            ],
           ),
         ),
       ),
@@ -54,7 +83,8 @@ class TodoListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(RouteConstants.detailScreen);
+        Get.toNamed(RouteConstants.detailScreen,
+            arguments: controller.todoList[index]);
       },
       child: Card(
           color: controller.getDateDifference(

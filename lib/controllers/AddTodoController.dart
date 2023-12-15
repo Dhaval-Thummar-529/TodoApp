@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/ActiveController.dart';
+import 'package:todo_app/controllers/FinishedController.dart';
 import 'package:todo_app/controllers/TodoController.dart';
 import 'package:todo_app/customWidgets/customSnackBar.dart';
 
@@ -143,13 +144,12 @@ class AddTodoController extends GetxController {
             endDate: endDate.value,
             progress: taskProgress.value.toInt());
         handler.insertTodo(todo);
-        if (selectedValue.value == statusList[1]) {
-          var controller = Get.find<TodoController>();
-          controller.fetchTodo();
-        } else {
-          var controller = Get.find<ActiveController>();
-          controller.fetchTodo();
-        }
+        var controller = Get.find<TodoController>();
+        controller.fetchTodo();
+        var activeController = Get.find<ActiveController>();
+        activeController.fetchTodo();
+        var finishedController = Get.find<FinishedController>();
+        finishedController.fetchTodo();
         emptyFields();
         Get.back();
       }

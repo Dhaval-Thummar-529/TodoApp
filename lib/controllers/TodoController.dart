@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/ActiveController.dart';
 import 'package:todo_app/controllers/MyTodoAppController.dart';
@@ -20,6 +21,11 @@ class TodoController extends GetxController {
 
   var checkBoxValueList = List.generate(0, (index) => false).obs;
 
+  var toDoTaskPercentage = 0.0.obs;
+
+  //All To-do list from database
+  late List<TodoModel> allTodoList;
+
   @override
   void onInit() {
     super.onInit();
@@ -31,11 +37,15 @@ class TodoController extends GetxController {
     isLoading(true);
     try {
       todoList = await handler.retrieveTodoByStatus("Todo");
+      allTodoList = await handler.retrieveAllTodo();
       checkBoxValueList = List.generate(todoList.length, (index) => false).obs;
     } catch (e) {
       print(e);
       isLoading(false);
     } finally {
+      if(todoList.isNotEmpty){
+        toDoTaskPercentage(((todoList.length/allTodoList.length)*100).toPrecision(2));
+      }
       isLoading(false);
     }
   }

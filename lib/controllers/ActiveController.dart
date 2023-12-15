@@ -21,6 +21,11 @@ class ActiveController extends GetxController{
 
   var checkBoxValueList = List.generate(0, (index) => false).obs;
 
+  var toDoTaskPercentage = 0.0.obs;
+
+  //All To-do list from database
+  late List<TodoModel> allTodoList;
+
   @override
   void onInit() {
     super.onInit();
@@ -32,11 +37,15 @@ class ActiveController extends GetxController{
     isLoading(true);
     try {
       active = await handler.retrieveTodoByStatus("active");
+      allTodoList = await handler.retrieveAllTodo();
       checkBoxValueList = List.generate(active.length, (index) => false).obs;
     } catch(e){
       print(e);
       isLoading(false);
     } finally {
+      if(active.isNotEmpty){
+        toDoTaskPercentage(((active.length/allTodoList.length)*100).toPrecision(2));
+      }
       isLoading(false);
     }
   }

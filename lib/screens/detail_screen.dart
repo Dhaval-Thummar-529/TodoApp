@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/detail_screen_controller.dart';
 
-class DetailScreen extends StatelessWidget{
+class DetailScreen extends StatelessWidget {
   DetailScreen({super.key});
 
   final DetailScreenController controller = Get.put(DetailScreenController());
@@ -11,15 +11,30 @@ class DetailScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Task Title"), centerTitle: true,),
+      appBar: AppBar(
+        title: Text(controller.todoModel.title),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(28),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  const Text("Task Description : ", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.blue),),
+                  Text(
+                    controller.todoModel.description,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.black),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
 }
